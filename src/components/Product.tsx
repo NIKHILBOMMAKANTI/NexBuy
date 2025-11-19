@@ -22,9 +22,12 @@ function ProductList({ ProductData, cartItems, setCartItems }: ProductDataProp) 
             timerProgressBar: true,
             didOpen: () => {
                 Swal.showLoading();
-                const timer = Swal.getPopup().querySelector("b");
+                const popup = Swal.getPopup()
+                const timer = popup?.querySelector("b");
                 timerInterval = setInterval(() => {
+                    if(timer){
                     timer.textContent = `${Swal.getTimerLeft()}`;
+                    }
                 }, 100);
             },
             willClose: () => {

@@ -13,33 +13,33 @@ interface CartItemsProp {
 function CartItems({ cartData }: CartItemsProp) {
 
     const Location = useLocater();
-    useEffect(()=>{
+    useEffect(() => {
         if (Location?.location) {
-          const user_addresses = Location?.location
-          localStorage.setItem('addresses', JSON.stringify(user_addresses));
+            const user_addresses = Location?.location
+            localStorage.setItem('addresses', JSON.stringify(user_addresses));
         }
-        },[])
+    }, [])
 
-    const handleAddress = (CartItem:any)=>{
+    const handleAddress = (CartItem: any) => {
         const user_addresses = JSON.parse(localStorage.getItem('addresses') ?? '[]');
-            console.log(user_addresses)
-            const currentaddress = user_addresses;
-            console.log("Current Address Type", typeof currentaddress);
-                    Swal.fire({
-                            title: "Confirm Your Delivery Address",
-                            text: "Please confirm or update the address before proceeding.",
-                            confirmButtonText: "Confirm Address",
-                            width: 700,
-                            html: ` <div style="display:flex;flex-direction:column">
+        console.log(user_addresses)
+        const currentaddress = user_addresses;
+        console.log("Current Address Type", typeof currentaddress);
+        Swal.fire({
+            title: "Confirm Your Delivery Address",
+            text: "Please confirm or update the address before proceeding.",
+            confirmButtonText: "Confirm Address",
+            width: 700,
+            html: ` <div style="display:flex;flex-direction:column">
                                 ${(currentaddress).map((EachAddress: any) => {
-                              return (
-                    
-                                `<div style="display:flex">
+                return (
+
+                    `<div style="display:flex">
                                       <input type="radio" style='marginRight:0.4rem'  name="AddAddress" value=${EachAddress}/>
                                       <label id="LocationLabel">${EachAddress}</label>
                                     </div>`)
-                    
-                            })}
+
+            })}
                     
                                     <div style="display:flex;margin-top:1rem">
                                       <input type="radio" style="margin-right:0.4rem" name="AddAddress" value="upiPayment" id="radio"/>
@@ -52,75 +52,77 @@ function CartItems({ cartData }: CartItemsProp) {
                                       </button>
                                   </div>
                                   </div>`,
+            confirmButtonColor: '#BA68C8',
+            didOpen: () => {
+
+                const confirmBtn = Swal.getConfirmButton();
+                if (confirmBtn) {
+                    confirmBtn.disabled = true;
+                }
+
+                const radios = document.getElementById('radio');
+                const inputContainer = document.getElementById('inputContainer');
+                const textarea = document.getElementById('textarea');
+                const addressbtn = document.getElementById("addressbtn");
+
+                if (inputContainer) {
+                    inputContainer.style.display = 'none';
+                }
+
+                radios?.addEventListener("change", () => {
+                    if ((radios as HTMLInputElement)?.checked && inputContainer) {
+                        inputContainer.style.display = 'flex';
+                    } else {
+                        if (inputContainer) {
+                            inputContainer.style.display = 'none';
+                        }
+                    }
+                })
+
+                addressbtn?.addEventListener("click", () => {
+                    const addressValue = (textarea as HTMLTextAreaElement)?.value.trim();
+                    if (!addressValue) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Address Not Found",
+                            text: "Please enter a valid address to continue.",
                             confirmButtonColor: '#BA68C8',
-                            didOpen: () => {
-                    
-                              const confirmBtn = Swal.getConfirmButton();
-                              if (confirmBtn) {
-                                confirmBtn.disabled = true;
-                              }
-                    
-                              const radios = document.getElementById('radio');
-                              const inputContainer = document.getElementById('inputContainer');
-                              const textarea = document.getElementById('textarea');
-                              const addressbtn = document.getElementById("addressbtn");
-                    
-                              if (inputContainer) {
-                                inputContainer.style.display = 'none';
-                              }
-                    
-                              radios?.addEventListener("change", () => {
-                                if (radios?.checked && inputContainer) {
-                                  inputContainer.style.display = 'flex';
-                                } else {
-                                  inputContainer.style.display = 'none';
-                                }
-                              })
-                    
-                              addressbtn?.addEventListener("click", () => {
-                                const addressValue = textarea?.value.trim();
-                                if (!addressValue) {
-                                  Swal.fire({
-                                    icon: "error",
-                                    title: "Address Not Found",
-                                    text: "Please enter a valid address to continue.",
-                                    confirmButtonColor: '#BA68C8',
-                                  });
-                                  return
-                                }
-                                console.log("addressValue", addressValue);
-                                const result = [...currentaddress, addressValue];
-                                Location?.setLocation(result);
-                                localStorage.setItem("addresses", JSON.stringify(result))
-                    
-                    
-                    
-                                Swal.close();
-                                setTimeout(() => {
-                                  handleAddress()
-                                }, 100)
-                    
-                              
-                              
-                              })
-                              const addressradios = document.querySelectorAll('input[name="AddAddress"]');
-                              console.log('AddAddresses',addressradios);
-                              addressradios.forEach((radios)=>{
-                                  radios.addEventListener("change",()=>{
-                                    const inputradios = document.querySelector('input[name="AddAddress"]:checked');
-                                    if(inputradios && confirmBtn){
-                                      confirmBtn.disabled = false
-                                    }
-                                  })
-                              })
-                            },
-                        }).then((result)=>{
-                            if(result.isConfirmed){
-                               Swal.fire(({
-                                title: "Summary",
-                                icon: "info",
-                                width: 650,
-                                html: `<table>
+                        });
+                        return
+                    }
+                    console.log("addressValue", addressValue);
+                    const result = [...currentaddress, addressValue];
+                    Location?.setLocation(result);
+                    localStorage.setItem("addresses", JSON.stringify(result))
+
+
+
+                    Swal.close();
+                    setTimeout(() => {
+                        handleAddress(CartItem)
+                    }, 100)
+
+
+
+                })
+                const addressradios = document.querySelectorAll('input[name="AddAddress"]');
+                console.log('AddAddresses', addressradios);
+                addressradios.forEach((radios) => {
+                    radios.addEventListener("change", () => {
+                        const inputradios = document.querySelector('input[name="AddAddress"]:checked');
+                        if (inputradios && confirmBtn) {
+                            confirmBtn.disabled = false
+                        }
+                    })
+                })
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(({
+                    title: "Summary",
+                    icon: "info",
+                    width: 650,
+                    html: `<table>
                                     <tr>
                                     <th>Product Preview</th>
                                     <th>Title</th>
@@ -134,21 +136,21 @@ function CartItems({ cartData }: CartItemsProp) {
                                     <td>$${CartItem?.price}</td>
                                     </tr>
                                     </table>`,
-                                confirmButtonColor: '#BA68C8'
+                    confirmButtonColor: '#BA68C8'
 
-                            })).then((result) => {
-                                if (result.isConfirmed) {
-                                    Swal.fire({
-                                        title: "Order Confirmed!!",
-                                        text: "Thank You for Your Purchase",
-                                        icon: "success",
-                                        draggable: true,
-                                        confirmButtonColor: '#BA68C8'
-                                    });
-                                }
-                            })
-                            }
-                        })
+                })).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Order Confirmed!!",
+                            text: "Thank You for Your Purchase",
+                            icon: "success",
+                            draggable: true,
+                            confirmButtonColor: '#BA68C8'
+                        });
+                    }
+                })
+            }
+        })
     }
 
     const handleBuyNow = (CartItem: any) => {
@@ -200,7 +202,7 @@ function CartItems({ cartData }: CartItemsProp) {
                 cartData.map((CartItem: any) => {
                     { console.log("testing cartItem", CartItem) }
                     return (
-                        <Card  key={CartItem.id}>
+                        <Card key={CartItem.id}>
                             <Link to={`/product/${CartItem.id}/${CartItem.category}`} style={{ textDecoration: 'none', color: 'black' }} >
                                 <CardMedia
                                     component="img"

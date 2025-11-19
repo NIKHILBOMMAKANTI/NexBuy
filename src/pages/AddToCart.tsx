@@ -80,15 +80,17 @@ function AddToCart() {
                       }
             
                       radios?.addEventListener("change", () => {
-                        if (radios?.checked && inputContainer) {
+                        if ((radios as HTMLInputElement)?.checked && inputContainer) {
                           inputContainer.style.display = 'flex';
                         } else {
+                          if(inputContainer){
                           inputContainer.style.display = 'none';
+                          }
                         }
                       })
             
                       addressbtn?.addEventListener("click", () => {
-                        const addressValue = textarea?.value.trim();
+                        const addressValue = (textarea as HTMLTextAreaElement)?.value.trim();
                         if (!addressValue) {
                           Swal.fire({
                             icon: "error",
