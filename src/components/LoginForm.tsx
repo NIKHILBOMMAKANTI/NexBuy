@@ -34,11 +34,6 @@ function LoginForm() {
     const handleLoginBtn = async () => {
         const email = LogFormData?.current.email?.value;
         const password = LogFormData?.current.password?.value;
-
-        const LoginUserData = {
-            email,
-            password
-        }
         const UserData = localStorage.getItem("UserInfo");
         const Parsedata = UserData ? JSON.parse(UserData) : []
         let FilteredData = Parsedata.find((user: any) => {

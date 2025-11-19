@@ -26,7 +26,7 @@ function CustomPagination({ setFilteredData,data}: PaginationProp) {
         FetchData()
     },[page,data])
 
-    const handlechange = (event:any,value:number)=>{
+    const handlechange = (_event:any,value:number)=>{
         setPage(value);
     }
 
