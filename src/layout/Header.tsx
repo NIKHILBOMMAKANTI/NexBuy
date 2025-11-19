@@ -82,7 +82,7 @@ const NavBar = ({ data, setSearchData, cartItems }: HeaderProp) => {
       if (!criteria) {
         return data
       }
-      if (Product.category?.toLowerCase() == criteriatoLowerCase || Product.brand?.toLowerCase() == criteriatoLowerCase || Product.title?.toLowerCase().includes(criteriatoLowerCase)) {
+      if (Product.category?.toLowerCase() == criteriatoLowerCase || Product.brand?.toLowerCase() == criteriatoLowerCase || Product.title?.toLowerCase()?.includes(criteriatoLowerCase ?? " ")) {
         return Product
       }
     })

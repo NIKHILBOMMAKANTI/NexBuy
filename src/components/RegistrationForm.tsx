@@ -74,7 +74,7 @@ function RegistrationForm() {
             });
         }
     }
-
+    console.log("userDetails",userDetails);
     return (
         <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5', padding: 2 }}>
             <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column' }}>
