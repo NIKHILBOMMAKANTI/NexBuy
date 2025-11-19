@@ -31,7 +31,7 @@ function ProductInfo({ id }: ProductInfoProp) {
       localStorage.setItem('addresses', JSON.stringify(user_addresses));
     }
 
-  },[])
+  }, [])
 
   const handleBuy = () => {
     const user_addresses = JSON.parse(localStorage.getItem('addresses') ?? '[]');
@@ -84,15 +84,17 @@ function ProductInfo({ id }: ProductInfoProp) {
           }
 
           radios?.addEventListener("change", () => {
-            if (radios?.checked && inputContainer) {
+            if ((radios as HTMLInputElement)?.checked && inputContainer) {
               inputContainer.style.display = 'flex';
             } else {
-              inputContainer.style.display = 'none';
+              if (inputContainer) {
+                inputContainer.style.display = 'none';
+              }
             }
           })
 
           addressbtn?.addEventListener("click", () => {
-            const addressValue = textarea?.value.trim();
+            const addressValue = (textarea as HTMLTextAreaElement)?.value.trim();
             if (!addressValue) {
               Swal.fire({
                 icon: "error",
@@ -114,24 +116,24 @@ function ProductInfo({ id }: ProductInfoProp) {
               handleBuy()
             }, 100)
 
-          
-          
+
+
           })
           const addressradios = document.querySelectorAll('input[name="AddAddress"]');
-          console.log('AddAddresses',addressradios);
-          addressradios.forEach((radios)=>{
-              radios.addEventListener("change",()=>{
-                const inputradios = document.querySelector('input[name="AddAddress"]:checked');
-                if(inputradios && confirmBtn){
-                  confirmBtn.disabled = false
-                }
-              })
+          console.log('AddAddresses', addressradios);
+          addressradios.forEach((radios) => {
+            radios.addEventListener("change", () => {
+              const inputradios = document.querySelector('input[name="AddAddress"]:checked');
+              if (inputradios && confirmBtn) {
+                confirmBtn.disabled = false
+              }
+            })
           })
         },
       }).then((result) => {
 
-        if(result.isConfirmed){
-              Swal.fire(({
+        if (result.isConfirmed) {
+          Swal.fire(({
             title: "Summary",
             icon: "info",
             width: 650,
@@ -162,7 +164,7 @@ function ProductInfo({ id }: ProductInfoProp) {
             }
           })
         }
-        
+
       })
 
     } else if (FormData.current?.UPIPayment?.checked == true) {
